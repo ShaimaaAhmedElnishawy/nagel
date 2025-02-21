@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string ('phone');
             $table->string ('password');
             $table->date('DOB');
+            $table->string('gender');
             $table->text ('address');
             
         });

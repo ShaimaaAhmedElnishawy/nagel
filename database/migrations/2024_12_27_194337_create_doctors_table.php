@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string ('password');
             $table->text ('speciality');
             $table->string('proof');
+            $table->timestamps();
             
         });
     }

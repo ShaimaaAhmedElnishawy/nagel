@@ -12,7 +12,7 @@ class Patient extends Model
 
     public $timestamps=0;
 
-    protected $fillable=['name','email','phone','password','address','image','DOB'];
+    protected $fillable=['name','email','phone','password','address','image','DOB','gender'];
 
     public function Nail_image(){
         return $this-> hasMany(Nail_image::class);

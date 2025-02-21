@@ -18,6 +18,7 @@ class AuthController extends BaseController {
                     'password' => 'required|string|confirmed',
                     'phone' => 'required|string|min:11|max:15',
                     'DOB' => 'required|date', //year-month-day
+                    'gender' => 'required|string', 
                     'address' => 'required|string'
                 ]);
                         $validData['password'] = Hash::make($validData['password']);
