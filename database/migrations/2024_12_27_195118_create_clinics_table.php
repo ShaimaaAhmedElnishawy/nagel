@@ -21,7 +21,6 @@ return new class extends Migration
             ->on('doctors')
             ->onDelete('cascade')->onUpdate('cascade');
             $table->string('phone');
-            $table->point('location');
             $table->json('available_hours');
             
         });

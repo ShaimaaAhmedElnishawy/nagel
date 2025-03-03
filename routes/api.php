@@ -6,6 +6,7 @@ use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\AIController;
 
 
 /*
@@ -45,17 +46,18 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
  });
 
  //***Patients***:-
-
+ 
  Route::middleware(['patient'])->group(function () {
      Route::post('/patient/uploadNailImage/{id}',[PatientController::class,'uploadNailImage']);
+     Route::post('/patient/diagnose/{imageId}', [AIController::class, 'diagnose']);
 
      Route::put('/patient/editName/{id}',[PatientController::class,'editName']);
      Route::put('/patient/editEmail/{id}',[PatientController::class,'editEmail']);
      Route::put('/patient/editPassword/{id}',[PatientController::class,'editPassword']);
      Route::put('/patient/editPhone/{id}',[PatientController::class,'editPhone']);
      
+     Route::get('/patient/showDoctors',[PatientController::class,'showDoctorData']);
      
      Route::post('/patient/logout',[AuthController::class,'PatientLogout']);
     });
     
-    Route::get('/patient/showDoctors',[PatientController::class,'showDoctorData']);

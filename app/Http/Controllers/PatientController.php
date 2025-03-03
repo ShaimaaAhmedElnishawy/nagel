@@ -15,19 +15,22 @@ use App\Http\Resources\DoctorResource;
 class PatientController extends BaseController
 {
     public function uploadNailImage(Request $request){
-
+    
+        // Validate the request
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
-            'image'=> 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
-        $path=$request->file('image')->store('nail_images','public');
-
-        $nailImage=Nail_image::create([
-            'patient_id'=>$request->patient_id,
-            'image_file'=>$path,
+    
+        // Store the image
+        $path = $request->file('image')->store('nail_images', 'public');
+    
+        // Save the image to the database
+        $nailImage = Nail_image::create([
+            'patient_id' => $request->patient_id,
+            'image_file' => $path,
         ]);
-
+    
         return response()->json(['success' => true, 'nailImage' => $nailImage ],201);
     }
 

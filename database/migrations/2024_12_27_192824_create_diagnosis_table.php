@@ -13,12 +13,6 @@ return new class extends Migration
     {
         Schema::create('diagnosis', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id');
-            // $table->foreign('patient_id')
-            // ->references('id')
-            // ->on('patients')
-            // ->onDelete('cascade')->onUpdate('cascade');
-            
             $table->unsignedBigInteger('image_id');
             $table->foreign('image_id')
             ->references('id')
