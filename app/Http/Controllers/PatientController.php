@@ -21,22 +21,24 @@ class PatientController extends BaseController
             'patient_id' => 'required|exists:patients,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $patient=Auth::guard('patient')->user();
     
         // Store the image
         $path = $request->file('image')->store('nail_images', 'public');
     
         // Save the image to the database
         $nailImage = Nail_image::create([
-            'patient_id' => $request->patient_id,
+            'patient_id' => $patient->id,
             'image_file' => $path,
         ]);
     
         return response()->json(['success' => true, 'nailImage' => $nailImage ],201);
     }
 
-    public function editName(Request $request,$id){
+    public function editName(Request $request){
 
-        $patient= Patient::find($id);
+        $patient= Auth::guard('patient')->user();
         $validator=Validator::make($request->all(),[
             'name' => 'required|string|max:255',
         ]);
@@ -44,14 +46,13 @@ class PatientController extends BaseController
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $patient->name=$request->name;
-        $patient->save();
+        Patient::where('id',$patient->id)->update(['name'=>$request->name]);
         return response()->json(['success'=>true,'message'=>'Name Updated Successfully'],200);
     }
 
     public function editEmail(Request $request,$id){
 
-        $patient= Patient::find($id);
+        $patient= Auth::guard('patient')->user();
         $validator=Validator::make($request->all(),[
             'email' => 'required|string|email|max:255|unique:patients',
         ]);
@@ -59,14 +60,13 @@ class PatientController extends BaseController
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $patient->email=$request->email;
-        $patient->save();
+        Patient::where('id',$patient->id)->update(['email'=>$request->email]);
         return response()->json(['success'=>true,'message'=>'Email Updated Successfully'],200);
     }
 
     public function editPassword(Request $request,$id){
 
-        $patient= Patient::find($id);
+        $patient= Auth::guard('patient')->user();
         $validator=Validator::make($request->all(),[
             'password' => 'required|string|confirmed',
         ]);
@@ -74,14 +74,16 @@ class PatientController extends BaseController
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $patient->password=Hash::make($request->password);
-        $patient->save();
+        if (!Hash::check($request->current_password, $patient->password)) {
+            return response()->json(['error' => 'Current password is incorrect'], 401);
+        }
+        Patient::where('id',$patient->id)->update(['password'=>Hash::make($request->password)]);
         return response()->json(['success'=>true,'message'=>'Password Updated Successfully'],200);
     }
 
     public function editPhone(Request $request,$id){
 
-        $patient= Patient::find($id);
+        $patient= Auth::guard('patient')->user();
         $validator=Validator::make($request->all(),[
             'phone' => 'required|string|min:11|max:15',
         ]);
@@ -89,8 +91,8 @@ class PatientController extends BaseController
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $patient->phone=$request->phone;
-        $patient->save();
+        Patient::where('id',$patient->id)->update(['phone'=>$request->phone]);
+
         return response()->json(['success'=>true,'message'=>'Phone Updated Successfully'],200);
     }
 

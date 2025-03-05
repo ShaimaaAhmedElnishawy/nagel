@@ -35,12 +35,12 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
 
  Route::middleware(['doctor'])->group(function () {
      
-     Route::get('/doctor/info/{id}',[DoctorController::class,'show']);
+     Route::get('/doctor/info',[DoctorController::class,'show']);
 
-     Route::put('/doctor/editName/{id}',[DoctorController::class,'editName']);
-     Route::put('/doctor/editEmail/{id}',[DoctorController::class,'editEmail']);
-     Route::put('/doctor/editPassword/{id}',[DoctorController::class,'editPassword']);
-     Route::put('/doctor/editPhone/{id}',[DoctorController::class,'editPhone']);
+     Route::put('/doctor/editName',[DoctorController::class,'editName']);
+     Route::put('/doctor/editEmail',[DoctorController::class,'editEmail']);
+     Route::put('/doctor/editPassword',[DoctorController::class,'editPassword']);
+     Route::put('/doctor/editPhone',[DoctorController::class,'editPhone']);
 
      Route::post('/doctor/logout',[AuthController::class,'DoctorLogout']);
  });
@@ -48,13 +48,13 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
  //***Patients***:-
  
  Route::middleware(['patient'])->group(function () {
-     Route::post('/patient/uploadNailImage/{id}',[PatientController::class,'uploadNailImage']);
+     Route::post('/patient/uploadNailImage',[PatientController::class,'uploadNailImage']);
      Route::post('/patient/diagnose/{imageId}', [AIController::class, 'diagnose']);
 
-     Route::put('/patient/editName/{id}',[PatientController::class,'editName']);
-     Route::put('/patient/editEmail/{id}',[PatientController::class,'editEmail']);
-     Route::put('/patient/editPassword/{id}',[PatientController::class,'editPassword']);
-     Route::put('/patient/editPhone/{id}',[PatientController::class,'editPhone']);
+     Route::put('/patient/editName',[PatientController::class,'editName']);
+     Route::put('/patient/editEmail',[PatientController::class,'editEmail']);
+     Route::put('/patient/editPassword',[PatientController::class,'editPassword']);
+     Route::put('/patient/editPhone',[PatientController::class,'editPhone']);
      
      Route::get('/patient/showDoctors',[PatientController::class,'showDoctorData']);
      

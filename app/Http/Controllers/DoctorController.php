@@ -8,13 +8,13 @@ use App\Http\Resources\DoctorResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 class DoctorController extends BaseController 
 {
 
-    public function show($id){
+    public function show(){
 
-        $doctor = Doctor::find($id);
+        $doctor = Auth::guard('doctor')->user();
         if($doctor){
             return new DoctorResource($doctor);
         } else{
@@ -25,26 +25,31 @@ class DoctorController extends BaseController
 
     public function getClinic($doctor_id){}
     // ##DATA EDITING :-
-    public function editName(Request $request,$id){
+    public function editName(Request $request){
 
-        $doctor= Doctor::find($id);
+        $doctor= Auth::guard('doctor')->user(); 
         $validator=Validator::make($request->all(),[
-            'name'=>'required|string|max:255',
+            'name'=>'required|string',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(),400);
-        }
-        $doctor->name=$request->name;
-        $doctor->save();
+        } 
+        
+        // $doctor->name = $request->name;
+       // $doctor->save();
+        Doctor::where('id', $doctor->id)->update(['name' => $request->name]);
         return response()->json(['success'=>true,'message'=>'Name Updated Successfully'],200);
+
+        
 
         
     }
 
-    public function editEmail(Request $request,$id){
+    public function editEmail(Request $request){
 
-        $doctor= Doctor::find($id);
+        $doctor= Auth::guard('doctor')->user(); 
+
         $validator=Validator::make($request->all(),[
             'email' => 'required|string|email|max:255|unique:doctors',
         ]);
@@ -52,29 +57,33 @@ class DoctorController extends BaseController
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $doctor->email=$request->email;
-        $doctor->save();
+        Doctor::where('id', $doctor->id)->update(['email' => $request->email]);
+
         return response()->json(['success'=>true,'message'=>'Email Updated Successfully'],200);
     }
 
-    public function editPassword(Request $request,$id){
+    public function editPassword(Request $request){
 
-        $doctor= Doctor::find($id);
-        $validator=Validator::make($request->all(),[
-            'password' => 'required|string|confirmed',
+        $doctor= Auth::guard('doctor')->user(); 
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|confirmed'
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $doctor->password=Hash::make($request->password);
-        $doctor->save();
+        if (!Hash::check($request->current_password, $doctor->password)) {
+            return response()->json(['error' => 'Current password is incorrect'], 401);
+        }
+        Doctor::where('id', $doctor->id)->update(['password' => Hash::make($request->new_password)]); 
+
         return response()->json(['success'=>true,'message'=>'Password Updated Successfully'],200);
     }
 
-    public function editPhone(Request $request,$id){
+    public function editPhone(Request $request){
 
-        $doctor= Doctor::find($id);
+        $doctor = Auth::guard('doctor')->user();
         $validator=Validator::make($request->all(),[
             'phone' => 'required|string|min:11|max:15',
         ]); 
@@ -82,8 +91,8 @@ class DoctorController extends BaseController
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $doctor->phone=$request->phone;
-        $doctor->save();
+        Doctor::where('id', $doctor->id)->update(['phone' => $request->phone]);
+
         return response()->json(['success'=>true,'message'=>'Phone Updated Successfully'],200);
     }
 
