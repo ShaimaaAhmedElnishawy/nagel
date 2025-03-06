@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\AIController;
+use App\Http\Controllers\ClinicController;
+
 
 
 /*
@@ -41,6 +43,10 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
      Route::put('/doctor/editEmail',[DoctorController::class,'editEmail']);
      Route::put('/doctor/editPassword',[DoctorController::class,'editPassword']);
      Route::put('/doctor/editPhone',[DoctorController::class,'editPhone']);
+
+     Route::post('/doctor/AddClinic',[ClinicController::class,'AddClinic']);
+     Route::get('/doctor/DisplayClinics',[ClinicController::class,'DisplayClinics']);
+     Route::put('/doctor/EditClinic/{id}',[ClinicController::class,'EditClinic']);
 
      Route::post('/doctor/logout',[AuthController::class,'DoctorLogout']);
  });

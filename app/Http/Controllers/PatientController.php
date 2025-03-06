@@ -98,8 +98,8 @@ class PatientController extends BaseController
 
     public function showDoctorData(){
 
-       $doctor=Doctor::all();
-       return new DoctorResource($doctor);
+       $doctors=Doctor::all();
+       return DoctorResource::collection($doctors);
         
     }
 

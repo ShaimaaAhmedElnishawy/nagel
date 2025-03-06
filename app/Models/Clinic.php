@@ -10,6 +10,8 @@ class Clinic extends Model
     use HasFactory;
     protected $guarded=[];
 
+    public $timestamps = false;
+
     public function doctore(){
         return $this->belongsTo(Doctor::class);
 }
