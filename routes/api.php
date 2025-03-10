@@ -63,7 +63,7 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
      Route::put('/patient/editPhone',[PatientController::class,'editPhone']);
      
      Route::get('/patient/showDoctors',[PatientController::class,'showDoctorData']);
-     Route::post('/patient/rateDoctor/{id}',[PatientController::class,'rateDoctor']);
+     Route::post('/doctors/{doctor}/rate',[PatientController::class,'rateDoctor']);
      
      Route::post('/patient/logout',[AuthController::class,'PatientLogout']);
     });
