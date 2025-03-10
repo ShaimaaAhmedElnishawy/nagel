@@ -20,7 +20,7 @@ class ClinicController extends BaseController
                 'name' => 'required|string',
                 'address' => 'required|string',
                 'phone' => 'required|string|min:11|max:15',
-                'available_hours' => 'required|string',
+                //'available_hours' => 'required|string',
             ]);
             $vaildateData['doctor_id'] = $doctor->id;
             $clinic = Clinic::create($vaildateData);
@@ -71,7 +71,7 @@ class ClinicController extends BaseController
                 'name' => 'sometimes|string',
                 'address' => 'sometimes|string',
                 'phone' => 'sometimes|string|min:11|max:15',
-                'available_hours' => 'sometimes|string',
+                //'available_hours' => 'sometimes|string',
             ]);
 
             // Update the clinic
@@ -90,5 +90,7 @@ class ClinicController extends BaseController
             ], 500);
         }
     }
+
+    
 
 }

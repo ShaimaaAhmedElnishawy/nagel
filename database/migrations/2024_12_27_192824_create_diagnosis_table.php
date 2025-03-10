@@ -26,7 +26,7 @@ return new class extends Migration
             ->onDelete('cascade')->onUpdate('cascade');
             $table->timestamp('date');
             $table->float('percentage');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
