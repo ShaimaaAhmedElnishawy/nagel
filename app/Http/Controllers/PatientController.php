@@ -103,4 +103,39 @@ class PatientController extends BaseController
         
     }
 
+    public function rateDoctor(Request $request) {
+        try {
+            $patient = Auth::guard('patient')->user();
+    
+            $validated = $request->validate([
+                'doctor_id' => 'required|exists:doctors,id',
+                'rateing' => 'required|numeric|min:1|max:5', // Rateing from 1 to 5
+            ]);
+    
+            $doctor = Doctor::findOrFail($validated['doctor_id']);
+    
+            // Calculate new average rateing
+            $currentRateing = $doctor->rateing;
+            $totalRateings = $doctor->total_rateings;
+            $newRateing = ($currentRateing * $totalRateings + $validated['rateing']) / ($totalRateings + 1);
+    
+            // Update doctor's rateing
+            $doctor->rateing = $newRateing;
+            $doctor->total_rateings += 1; // Increment total rateings
+            $doctor->save();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Rateing submitted successfully.',
+                'new_rateing' => $doctor->rateing,
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
