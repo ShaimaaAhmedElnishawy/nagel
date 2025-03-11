@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Clinic;
 use App\Models\Doctor;
+use App\Models\Schedule;
 use App\Http\Resources\ClinicResource;
+use App\Http\Resources\ScheduleResource;
 
 
 class ClinicController extends BaseController
@@ -89,6 +91,132 @@ class ClinicController extends BaseController
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function AddAvailableHours(Request $request){
+        
+        $doctor= Auth::guard('doctor')->user();
+        $vaildateData = $request->validate([            
+            'available_hours' => 'required|string',
+        ]);
+        $vaildateData['doctor_id'] = $doctor->id;
+        $schedule = Schedule::create($vaildateData);
+        return response()->json(['success' => true, 'schedule' => $schedule, 'message' => 'schedule added successfully']);
+    }
+
+    public function DisplayAvailableHours(){
+        $doctor = Auth::guard('doctor')->user();
+        $schedules = $doctor->schudule->all();
+        if($schedules){
+            return  ScheduleResource::collection($schedules);
+        } else{
+            return response()->json(['success' => false, 'message' => 'schedule not found']);
+        }
+    }
+
+    public function EditAvailableHours(Request $request, $id){
+        try {
+            // Get the authenticated doctor
+            $doctor = Auth::guard('doctor')->user();
+
+            // Find the schedule by ID
+            $schedule = Schedule::find($id);
+
+            // Check if the schedule exists
+            if($schedule->doctor_id !== $doctor->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are not authorized to edit this schedule',
+                ], 403);
+            }
+
+            // Validate the request data
+            $validateData = $request->validate([
+                'available_hours' => 'sometimes|string',
+            ]);
+
+            // Update the schedule
+            $schedule->update($validateData);
+
+            return response()->json([
+                'success' => true,
+                'schedule' => $schedule,
+                'message' => 'Schedule updated successfully',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // public function DeleteAvailableHours($id){
+    //     $doctor = Auth::guard('doctor')->user();
+    //     $schedule = Schedule::find($id);
+    //     if (!$schedule) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Schedule not found.',
+    //         ], 404);
+    //     }
+    
+    //     if($doctor->schedule->id !== $id){
+    //         return response()->json(['success' => false, 'message' => 'You are not authorized to delete this schedule']);
+    //     }
+    //     $schedule->delete();
+    //     return response()->json(['success' => true, 'message' => 'Schedule deleted successfully']);
+    // }
+
+    public function DeleteAvailableHours($id){
+
+        // Get the authenticated doctor
+        $doctor = Auth::guard('doctor')->user();
+
+        // Find the schedule by ID
+        $schedule = Schedule::find($id);
+
+        // Check if the schedule exists
+        if (!$schedule) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Schedule not found.',
+            ], 404);
+        }
+
+        // Check if the schedule belongs to the authenticated doctor
+        if ($schedule->doctor_id !== $doctor->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to delete this schedule.',
+            ], 403);
+        }
+
+        // Delete the schedule
+        $schedule->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Schedule deleted successfully.',
+        ]);
+    }
+
+    public function DeleteClinic($id){        
+        $doctor = Auth::guard('doctor')->user();
+        $clinic = Clinic::find($id);
+        if (!$clinic) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Clinic not found.',
+            ], 404);
+        }
+        if($doctor->clinic->id !== $doctor->id){
+            return response()->json(['success' => false, 'message' => 'You are not authorized to delete this clinic']);
+        }
+        $clinic->delete();
+        return response()->json(['success' => true, 'message' => 'Clinic deleted successfully']);
     }
 
     

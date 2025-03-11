@@ -16,7 +16,7 @@ class Doctor extends Model
         return $this->hasMany(Clinic::class);
     }
 
-    public function schuduall(){
-        return $this->hasMany(Scheduall::class);
+    public function schudule(){
+        return $this->hasMany(Schedule::class);
     }
 }

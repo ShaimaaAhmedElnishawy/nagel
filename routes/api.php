@@ -43,10 +43,16 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
      Route::put('/doctor/editEmail',[DoctorController::class,'editEmail']);
      Route::put('/doctor/editPassword',[DoctorController::class,'editPassword']);
      Route::put('/doctor/editPhone',[DoctorController::class,'editPhone']);
-
+     
+     //***Clinics***:-
      Route::post('/doctor/AddClinic',[ClinicController::class,'AddClinic']);
      Route::get('/doctor/DisplayClinics',[ClinicController::class,'DisplayClinics']);
      Route::put('/doctor/EditClinic/{id}',[ClinicController::class,'EditClinic']);
+     Route::delete('/doctor/DeleteClinic/{id}',[ClinicController::class,'DeleteClinic']);
+     Route::post('/doctor/AddAvailableHours',[ClinicController::class,'AddAvailableHours']);
+     Route::get('/doctor/DisplayAvailableHours',[ClinicController::class,'DisplayAvailableHours']);
+     Route::put('/doctor/EditAvailableHours/{id}',[ClinicController::class,'EditAvailableHours']);
+     Route::delete('/doctor/DeleteAvailableHours/{id}',[ClinicController::class,'DeleteAvailableHours']);
 
      Route::post('/doctor/logout',[AuthController::class,'DoctorLogout']);
  });
