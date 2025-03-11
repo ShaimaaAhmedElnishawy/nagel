@@ -10,7 +10,7 @@ use App\Models\Nail_image;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\DoctorResource;
+use App\Http\Resources\Doctor2Resource;
 
 class PatientController extends BaseController
 {
@@ -98,8 +98,8 @@ class PatientController extends BaseController
 
     public function showDoctorData(){
 
-       $doctors=Doctor::all();
-       return DoctorResource::collection($doctors);
+       $doctors=Doctor::with(['clinic', 'schedule'])->get();
+       return Doctor2Resource::collection($doctors);
         
     }
 
