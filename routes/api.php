@@ -70,6 +70,11 @@ Route::post('/doctor/login',[AuthController::class,'DoctorLogin']);
      
      Route::get('/patient/showDoctors',[PatientController::class,'showDoctorData']);
      Route::post('/doctors/{doctor}/rate',[PatientController::class,'rateDoctor']);
+
+     //serach in doctors
+     Route::post('/doctors/searchByName',[PatientController::class,'searchByName']);
+     Route::post('/doctors/searchByAddress',[PatientController::class,'searchByAddress']);
+     Route::post('/doctors/filterBySpecialization',[PatientController::class,'filterDoctorsBySpecialization']);
      
      Route::post('/patient/logout',[AuthController::class,'PatientLogout']);
     });

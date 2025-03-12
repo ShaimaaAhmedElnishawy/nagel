@@ -137,4 +137,76 @@ class PatientController extends BaseController
         }
     }
 
+    public function searchByName(Request $request){
+
+        // Validate the request
+        $request->validate([
+            'dr_name' => 'required|string', // Remove 'exists' rule
+        ]);
+
+        // Search for doctors with names matching the search term
+        $doctors = Doctor::with(['clinic', 'schedule'])
+            ->where('name', 'like', '%' . $request->dr_name . '%')
+            ->get();
+
+        // Check if any doctors were found
+        if ($doctors->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No doctors found with the specified name.',
+            ], 404);
+        }
+
+        // Return the results using the custom resource
+        return Doctor2Resource::collection($doctors);
+    }
+
+    public function searchByAddress(Request $request){
+
+        // Validate the request
+        $request->validate([
+            'address' => 'required|string', // Ensure this matches the key in the request
+        ]);
+
+        // Search for doctors with clinics at the specified address
+        $doctors = Doctor::whereHas('clinic', function ($query) use ($request) {
+            $query->where('address', 'like', '%' . $request->address . '%'); // Use 'address' instead of 'clinic_address'
+        })->with(['clinic', 'schedule'])->get();
+
+        // Check if any doctors were found
+        if ($doctors->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No doctors found with the specified address.',
+            ], 404);
+        }
+
+        // Return the results using the custom resource
+        return Doctor2Resource::collection($doctors);
+    }
+
+    public function filterDoctorsBySpecialization(Request $request){
+
+        // Validate the request
+        $request->validate([
+            'specialization' => 'required|string',
+        ]);
+
+        // Filter doctors by specialization
+        $doctors = Doctor::where('specialization', $request->specialization)
+            ->with(['clinic', 'schedule'])
+            ->get();
+
+        // Check if any doctors were found
+        if ($doctors->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No doctors found with the specified specialization.',
+            ], 404);
+        }
+
+        // Return the results using the custom resource
+        return Doctor2Resource::collection($doctors);
+    }
+    
 }
