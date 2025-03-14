@@ -11,29 +11,52 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Doctor2Resource;
+use Illuminate\Support\Facades\Http;
 
 class PatientController extends BaseController
 {
     public function uploadNailImage(Request $request){
     
-        // Validate the request
+       // Validate the request
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $patient=Auth::guard('patient')->user();
-    
+        $patient = Auth::guard('patient')->user();
+
         // Store the image
         $path = $request->file('image')->store('nail_images', 'public');
-    
-        // Save the image to the database
-        $nailImage = Nail_image::create([
-            'patient_id' => $patient->id,
-            'image_file' => $path,
-        ]);
-    
-        return response()->json(['success' => true, 'nailImage' => $nailImage ],201);
+
+        // Prepare the image file for the FASTAPI request
+        $imageFile = $request->file('image');
+        $imageContent = file_get_contents($imageFile->getRealPath());
+
+        // Send the image to the FASTAPI endpoint
+        $response = Http::attach(
+            'file', // The key for the file
+            $imageContent, // The file content
+            $imageFile->getClientOriginalName() // The file name
+        )->post('https://0565-196-152-20-16.ngrok-free.app/predict/');
+
+        // Check if the request was successful
+        if ($response->successful()) {
+            $aiResponse = $response->json();
+
+            // Save the image and AI response to the database
+            $nailImage = Nail_image::create([
+                'patient_id' => $patient->id,
+                'image_file' => $path,
+                'diagnosis' => $aiResponse['class'],
+                'confidence' => $aiResponse['confidence'],
+                'probabilities' => json_encode($aiResponse['probabilities']), // Store probabilities as JSON
+            ]);
+
+            return response()->json(['success' => true, 'nailImage' => $nailImage], 201);
+        } else {
+            // Handle the error
+            return response()->json(['success' => false, 'message' => 'Failed to get prediction from AI model'], 500);
+        }
     }
 
     public function editName(Request $request){
