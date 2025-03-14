@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('diagnosis');
             $table->float('confidence');
             $table->json('probabilities');
-            $table->timestamp('date');
+            $table->timestamps();
         });
     }
 

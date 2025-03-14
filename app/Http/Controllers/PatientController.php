@@ -16,36 +16,38 @@ use Illuminate\Support\Facades\Http;
 class PatientController extends BaseController
 {
     public function uploadNailImage(Request $request){
-    
-       // Validate the request
+        
+        // Validate the request (only the image is required)
         $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+        // Get the authenticated patient
         $patient = Auth::guard('patient')->user();
 
         // Store the image
-        $path = $request->file('image')->store('nail_images', 'public');
+        $path = $request->file('image_file')->store('nail_images', 'public');
 
         // Prepare the image file for the FASTAPI request
-        $imageFile = $request->file('image');
+        $imageFile = $request->file('image_file');
         $imageContent = file_get_contents($imageFile->getRealPath());
 
         // Send the image to the FASTAPI endpoint
-        $response = Http::attach(
+        $response = Http::withOptions([
+            'verify' => false, // Disable SSL verification
+        ])->attach(
             'file', // The key for the file
             $imageContent, // The file content
             $imageFile->getClientOriginalName() // The file name
-        )->post('https://0565-196-152-20-16.ngrok-free.app/predict/');
-
+        )->post('https://eb50-156-208-136-150.ngrok-free.app/predict/');
+        
         // Check if the request was successful
         if ($response->successful()) {
             $aiResponse = $response->json();
 
             // Save the image and AI response to the database
             $nailImage = Nail_image::create([
-                'patient_id' => $patient->id,
+                'patient_id' => $patient->id, // Use the authenticated patient's ID
                 'image_file' => $path,
                 'diagnosis' => $aiResponse['class'],
                 'confidence' => $aiResponse['confidence'],
