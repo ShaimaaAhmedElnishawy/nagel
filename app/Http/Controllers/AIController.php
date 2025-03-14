@@ -32,7 +32,7 @@ class AIController extends BaseController
                 'ngrok-skip-browser-warning' => 'true' // If needed
             ])
                 ->attach('file', file_get_contents($imagePath), basename($imagePath))
-                ->post('https://d07a-102-42-86-5.ngrok-free.app/predict');
+                ->post('https://0565-196-152-20-16.ngrok-free.app/predict/');
 
             if (!$response->successful()) {
                 throw new \Exception("API request failed: " . $response->status());

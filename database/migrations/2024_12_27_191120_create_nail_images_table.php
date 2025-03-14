@@ -19,7 +19,10 @@ return new class extends Migration
             ->on('patients')
             ->onDelete('cascade')->onUpdate('cascade');
             $table->string('image_file');
-            $table->timestamps();
+            $table->string('diagnosis');
+            $table->float('confidence');
+            $table->json('probabilities');
+            $table->timestamp('date');
         });
     }
 
