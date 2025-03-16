@@ -39,7 +39,7 @@ class PatientController extends BaseController
             'file', // The key for the file
             $imageContent, // The file content
             $imageFile->getClientOriginalName() // The file name
-        )->post('https://eb50-156-208-136-150.ngrok-free.app/predict/');
+        )->post('https://79ba-156-208-136-150.ngrok-free.app/predict/');
         
         // Check if the request was successful
         if ($response->successful()) {

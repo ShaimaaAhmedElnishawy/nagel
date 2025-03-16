@@ -51,6 +51,11 @@ return [
             'driver' => 'sanctum',
             'provider' => 'doctors',
         ],
+
+        'admin'=>[
+            'driver' => 'sanctum',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -83,7 +88,12 @@ return [
         'doctors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Doctor::class,
-        ]
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -128,6 +138,13 @@ return [
         'doctors' => [
             'provider' => 'doctors',
             'table' => 'password_reset_tokens_doctors',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_reset_tokens_admins',
             'expire' => 60,
             'throttle' => 60,
         ],

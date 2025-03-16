@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         // Other middleware
         'doctor' => \App\Http\Middleware\DoctorAuth::class,
         'patient' => \App\Http\Middleware\PatientAuth::class,
+        'admin' => \App\Http\Middleware\AdminAuth::class,
     ];
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\Patient;
 use App\Models\Doctor;
+Use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -43,10 +44,11 @@ class AuthController extends BaseController
                 'phone' => 'required|string|min:11|max:15',
                 'specialization' => 'required|string',
                 'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'status' => 'pending',
             ]);
             $validData['password'] = Hash::make($validData['password']);
             $doctore = Doctor::create($validData);
-            return response()->json(['success' => true, 'doctore' => $doctore, 'message' => 'you are registered successfully']);
+            return response()->json(['success' => true,'message' => 'thanks for rejestring to our app ,your registration pending admin approval']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -59,14 +61,11 @@ class AuthController extends BaseController
             'password' => 'required|string'
         ]);
 
-        // Find patient by email
         $patient = Patient::where('email', $validData['email'])->first();
-
-        // Check if patient exists and password is correct
+        
         if ($patient && Hash::check($validData['password'], $patient->password)) {
-            // Create Sanctum token
-            $token = $patient->createToken('patient_token')->plainTextToken;
 
+            $token = $patient->createToken('patient_token')->plainTextToken;
             return response()->json(['success' => true, 'message' => 'You are logged in successfully', 'token' => $token]);
         }
 
@@ -85,7 +84,7 @@ class AuthController extends BaseController
         $doctor = Doctor::where('email', $validData['email'])->first();
 
         // Check if doctor exists and password is correct
-        if ($doctor && Hash::check($validData['password'], $doctor->password)) {
+        if ($doctor && Hash::check($validData['password'], $doctor->password) && $doctor->status === 'approved') {
             // Create Sanctum token
             $token = $doctor->createToken('doctor_token')->plainTextToken;
 
@@ -100,6 +99,24 @@ class AuthController extends BaseController
             'success' => false,
             'message' => 'Invalid email or password'
         ], 401);
+    }
+
+    public function AdminLogin(Request $request){
+    
+        $validData = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
+
+        $admin = Admin::where('email', $validData['email'])->first();
+
+        if($admin){
+            $token= $admin->createToken('admin_token')->plainTextToken;
+            return response()->json(['success'=>true,'message'=>'You are logged in successfully','token'=>$token]);
+        }
+
+        return response()->json(['success'=>false,'message'=>'Invalid email or password'],401);
+
     }
 
     public function DoctorLogout(Request $request){
