@@ -61,6 +61,13 @@ class PatientController extends BaseController
         }
     }
 
+    public function showHistory(Request $request){
+
+        $patient= Auth::guard('patient')->user();
+        $nail_images= Nail_image::where('patient_id',$patient->id)->get();
+        return response()->json(['success'=>true,'nail_images'=>$nail_images],200);
+    }
+
     public function editName(Request $request){
 
         $patient= Auth::guard('patient')->user();

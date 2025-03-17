@@ -9,7 +9,5 @@ class Disease extends Model
 {
     use HasFactory;
 
-    public function diagnosis(){
-        return $this->belongsTo(Diagnosis::class);
-    }
+   
 }

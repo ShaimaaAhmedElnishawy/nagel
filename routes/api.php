@@ -63,6 +63,8 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
         Route::middleware(['patient'])->group(function () {
             Route::post('/patient/uploadNailImage',[PatientController::class,'uploadNailImage']);
 
+           Route::get('/patient/showHistory',[PatientController::class,'showHistory']);
+
             Route::put('/patient/editName',[PatientController::class,'editName']);
             Route::put('/patient/editEmail',[PatientController::class,'editEmail']);
             Route::put('/patient/editPassword',[PatientController::class,'editPassword']);

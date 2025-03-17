@@ -21,6 +21,7 @@ class ClinicController extends BaseController
             $vaildateData = $request->validate([
                 'name' => 'required|string',
                 'address' => 'required|string',
+                'location'=>'string|default:null',
                 'phone' => 'required|string|min:7|max:15',
                 //'available_hours' => 'required|string',
             ]);
@@ -153,22 +154,7 @@ class ClinicController extends BaseController
         }
     }
 
-    // public function DeleteAvailableHours($id){
-    //     $doctor = Auth::guard('doctor')->user();
-    //     $schedule = Schedule::find($id);
-    //     if (!$schedule) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Schedule not found.',
-    //         ], 404);
-    //     }
     
-    //     if($doctor->schedule->id !== $id){
-    //         return response()->json(['success' => false, 'message' => 'You are not authorized to delete this schedule']);
-    //     }
-    //     $schedule->delete();
-    //     return response()->json(['success' => true, 'message' => 'Schedule deleted successfully']);
-    // }
 
     public function DeleteAvailableHours($id){
 
