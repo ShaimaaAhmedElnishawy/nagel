@@ -21,7 +21,7 @@ class ClinicController extends BaseController
             $vaildateData = $request->validate([
                 'name' => 'required|string',
                 'address' => 'required|string',
-                'location'=>'string|default:null',
+                'location'=>'nullable|string',
                 'phone' => 'required|string|min:7|max:15',
                 //'available_hours' => 'required|string',
             ]);
