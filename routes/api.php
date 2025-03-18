@@ -86,7 +86,8 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
   Route::middleware(['admin'])->group(function () {
 
     Route::get('/admin/showPendedDoctors',[AdminController::class,'showPendedDoctors']);
-    Route::post('/admin/approveOrRejectDoctor/{doctor_id}',[AdminController::class,'approveOrRejectDoctor']);
+    Route::post('/admin/approveDoctor/{doctor_id}',[AdminController::class,'approveDoctor']);
+    Route::post('/admin/rejectDoctor/{doctor_id}',[AdminController::class,'rejectDoctor']);
   });
 
     

@@ -43,14 +43,23 @@ class AuthController extends BaseController
                 'password' => 'required|string|confirmed',
                 'phone' => 'required|string|min:11|max:15',
                 'specialization' => 'required|string',
+                'photo'=>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'status' => 'pending',
             ]);
+
+            if ($request->hasFile('photo')) {
+                $validData['photo'] = $request->file('photo')->store('doctors/photos', 'public');
+            }
+    
+            if ($request->hasFile('proof')) {
+                $validData['proof'] = $request->file('proof')->store('doctors/proofs', 'public');
+            }
+            $validData['status'] = 'pending';
             $validData['password'] = Hash::make($validData['password']);
             $doctore = Doctor::create($validData);
             return response()->json(['success' => true,'message' => 'thanks for rejestring to our app ,your registration pending admin approval']);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => $e->getMessage()],500);
         }
     }
 

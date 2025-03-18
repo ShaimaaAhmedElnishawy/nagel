@@ -17,10 +17,10 @@ class AdminController extends BaseController
         return response()->json($doctors);
     }
 
-    public function approveOrRejectDoctor(Request $request,$doctor_id){
+    public function approveDoctor(Request $request,$doctor_id){
 
         $request->validate([
-            'status'=>'required|in:approved,rejected',
+            'status'=>'required|in:approved',
         ]);
 
         $doctor = Doctor::findorFail($doctor_id);
@@ -29,7 +29,28 @@ class AdminController extends BaseController
 
             $doctor->status = $request->status;
             $doctor->save();
-            return response()->json(['success'=>true,'message'=>'Doctor status Updated Successfully'],200);
+            return response()->json(['success'=>true,'message'=>'Doctor approved Successfully'],200);
+        }
+
+        else{
+            return response()->json(['success'=>false,'message'=>'Doctor Not Found'],404);
+        }
+    }
+
+
+    public function rejectDoctor(Request $request,$doctor_id){
+
+        $request->validate([
+            'status'=>'required|in:rejected',
+        ]);
+
+        $doctor = Doctor::findorFail($doctor_id);
+
+        if($doctor && $doctor->status == 'pending'){
+
+            $doctor->status = $request->status;
+            $doctor->save();
+            return response()->json(['success'=>true,'message'=>'Doctor rejected Successfully'],200);
         }
 
         else{
