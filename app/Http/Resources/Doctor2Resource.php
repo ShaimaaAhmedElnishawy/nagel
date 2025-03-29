@@ -23,6 +23,9 @@ class Doctor2Resource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'rating' => $this->rating,
+            'specialization' => $this->specialization,
+            'total_rateings' => $this->total_rateings,
+            'photo' => $this->photo,
             'clinics' =>$this->clinic ? $this->clinic->map(function ($clinic) {
                 return [
                     'name' => $clinic->name,
