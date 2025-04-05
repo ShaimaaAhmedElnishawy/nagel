@@ -12,9 +12,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Doctor2Resource;
 use Illuminate\Support\Facades\Http;
+use App\Http\Resources\PatientResource;
 
 class PatientController extends BaseController
 {
+    public function showData(Request $request){
+        $patient = Auth::guard('patient')->user();
+        return new PatientResource($patient);
+    }
+    
     public function uploadNailImage(Request $request){
         
         // Validate the request (only the image is required)

@@ -43,7 +43,7 @@ class AuthController extends BaseController
                 'password' => 'required|string|confirmed',
                 'phone' => 'required|string|min:11|max:15',
                 'specialization' => 'required|string',
-                'photo'=>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'photo'=>'nullable',
                 'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 

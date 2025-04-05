@@ -23,6 +23,37 @@ class DoctorController extends BaseController
         
     }
 
+    public function UploadProfilePicture(Request $request){
+
+        try {
+            $doctor = Auth::guard('doctor')->user();
+            
+            $validData = $request->validate([
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            // Delete old photo if it exists
+            
+            // Store new photo
+            $photoPath = $request->file('photo')->store('doctors/photos', 'public');
+            
+            // Update doctor's photo
+            Doctor::where('id', $doctor->id)->update(['photo' => $photoPath]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Photo uploaded successfully',
+                'photo_url' => asset("storage/{$photoPath}") // Return full URL to the image
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+            }
+}
+
     public function getClinic($doctor_id){}
     // ##DATA EDITING :-
     public function editName(Request $request){

@@ -38,6 +38,7 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
 
     Route::middleware(['doctor'])->group(function () {
         
+        Route::post('/doctor/UploadProfilePicture',[DoctorController::class,'UploadProfilePicture']);
         Route::get('/doctor/info',[DoctorController::class,'show']);
 
         Route::put('/doctor/editName',[DoctorController::class,'editName']);
@@ -61,6 +62,9 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
     //***Patients***:-
     
         Route::middleware(['patient'])->group(function () {
+
+            Route::get('/patient/info',[PatientController::class,'showData']);
+
             Route::post('/patient/uploadNailImage',[PatientController::class,'uploadNailImage']);
 
            Route::get('/patient/showHistory',[PatientController::class,'showHistory']);
