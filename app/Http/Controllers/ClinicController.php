@@ -108,7 +108,7 @@ class ClinicController extends BaseController
 
     public function DisplayAvailableHours(){
         $doctor = Auth::guard('doctor')->user();
-        $schedules = $doctor->scheudule->all();
+        $schedules = $doctor->schedule->all();
         if($schedules){
             return  ScheduleResource::collection($schedules);
         } else{
