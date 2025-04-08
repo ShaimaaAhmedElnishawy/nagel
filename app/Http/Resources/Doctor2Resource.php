@@ -18,7 +18,7 @@ class Doctor2Resource extends JsonResource
         //return parent::toArray($request);
         
         return [
-            
+            'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
@@ -28,6 +28,7 @@ class Doctor2Resource extends JsonResource
             'photo' => $this->photo,
             'clinics' =>$this->clinic ? $this->clinic->map(function ($clinic) {
                 return [
+                    'clinic_id' => $clinic->id,
                     'name' => $clinic->name,
                     'address' => $clinic->address,
                     'phone' => $clinic->phone,
