@@ -13,12 +13,18 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Doctor2Resource;
 use Illuminate\Support\Facades\Http;
 use App\Http\Resources\PatientResource;
+use App\Http\Resources\PatientResource2;
 
 class PatientController extends BaseController
 {
-    public function showData(Request $request){
+    public function DisplaName(Request $request){
         $patient = Auth::guard('patient')->user();
         return new PatientResource($patient);
+    }
+
+    public function DisplaAddress(Request $request){
+        $patient = Auth::guard('patient')->user();
+        return new PatientResource2($patient);
     }
     
     public function uploadNailImage(Request $request){

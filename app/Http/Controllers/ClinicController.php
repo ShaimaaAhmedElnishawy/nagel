@@ -20,9 +20,9 @@ class ClinicController extends BaseController
            $doctor= Auth::guard('doctor')->user();
             $vaildateData = $request->validate([
                 'name' => 'required|string',
-                'address' => 'required|string',
+                'address' => 'nullable|string',
                 'location'=>'nullable|string',
-                'phone' => 'required|string|min:7|max:15',
+                'phone' => 'nullable|string|min:7|max:15',
                 //'available_hours' => 'required|string',
             ]);
             $vaildateData['doctor_id'] = $doctor->id;
