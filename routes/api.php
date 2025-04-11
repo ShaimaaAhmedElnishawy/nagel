@@ -63,8 +63,8 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
     
         Route::middleware(['patient'])->group(function () {
 
-            Route::get('/patient/name',[PatientController::class,'DisplayName']);
-            Route::get('/patient/address',[PatientController::class,'DisplayAddress']);
+            Route::get('/patient/name',[PatientController::class,'DisplyaName']);
+            Route::get('/patient/address',[PatientController::class,'DisplyaAddress']);
 
             Route::post('/patient/uploadNailImage',[PatientController::class,'uploadNailImage']);
 

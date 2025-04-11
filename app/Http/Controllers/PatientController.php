@@ -17,12 +17,12 @@ use App\Http\Resources\PatientResource2;
 
 class PatientController extends BaseController
 {
-    public function DisplaName(Request $request){
+    public function DisplyaName(Request $request){
         $patient = Auth::guard('patient')->user();
         return new PatientResource($patient);
     }
 
-    public function DisplaAddress(Request $request){
+    public function DisplyaAddress(Request $request){
         $patient = Auth::guard('patient')->user();
         return new PatientResource2($patient);
     }
