@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('clinics', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->string('lacation');
+            $table->string('address')->nullable();
+            $table->string('lacation')->nullable();
             $table->unsignedBigInteger('doctor_id');
             $table->foreign('doctor_id')
             ->references('id')
             ->on('doctors')
             ->onDelete('cascade')->onUpdate('cascade');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             
             
         });

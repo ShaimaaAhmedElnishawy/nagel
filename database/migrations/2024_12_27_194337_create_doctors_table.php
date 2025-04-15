@@ -19,8 +19,11 @@ return new class extends Migration
             $table->string ('password');
             $table->text ('specialization');
             $table->string('proof');
-            $table->float('rateing', 2, 1)->default(5.0); // e.g., 4.5
-            $table->integer('total_rateings')->default(5); // Optional: Track total rateings
+            $table->string('photo')->nullable();
+            $table->enum('status',['pending','approved','rejected'])->default('pending');
+            $table->float('rating', 2, 1)->nullable(); // last rating given
+            $table->float('total_ratings', 3, 2)->default(0); // average rating
+            $table->integer('number_of_ratings')->default(0);
             $table->timestamps();
             
         });
