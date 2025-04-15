@@ -112,20 +112,32 @@ class AuthController extends BaseController
 
     public function AdminLogin(Request $request){
     
+        try{
         $validData = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string'
         ]);
-
+    
         $admin = Admin::where('email', $validData['email'])->first();
-
-        if($admin){
-            $token= $admin->createToken('admin_token')->plainTextToken;
-            return response()->json(['success'=>true,'message'=>'You are logged in successfully','token'=>$token]);
+    
+        if (!$admin) {
+            return response()->json(['success' => false, 'message' => 'Invalid email or password'], 401);
         }
-
-        return response()->json(['success'=>false,'message'=>'Invalid email or password'],401);
-
+    
+        // Plain text comparison (INSECURE - only for temporary use)
+        if ($admin->password === $validData['password']) {
+            $token = $admin->createToken('admin_token')->plainTextToken;
+            return response()->json([
+                'success' => true,
+                'message' => 'You are logged in successfully',
+                'token' => $token
+            ]);
+        }
+    
+        return response()->json(['success' => false, 'message' => 'Invalid email or password'], 401);}
+        catch(\Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()],500);
+        }
     }
 
     public function DoctorLogout(Request $request){

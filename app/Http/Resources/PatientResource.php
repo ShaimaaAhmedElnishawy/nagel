@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class PatientResource extends JsonResource
 {
@@ -16,6 +17,9 @@ class PatientResource extends JsonResource
     {
        return([
         'name' => $this->name,
+        'address'=>$this->address,
+        'age'=>Carbon::parse($this->DOB)->age,
+        'gender'=>$this->gender,
        ]);
     }
 }

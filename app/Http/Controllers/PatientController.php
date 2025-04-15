@@ -17,15 +17,11 @@ use App\Http\Resources\PatientResource2;
 
 class PatientController extends BaseController
 {
-    public function DisplyaName(Request $request){
+    public function DisplyInfo(Request $request){
         $patient = Auth::guard('patient')->user();
         return new PatientResource($patient);
     }
 
-    public function DisplyaAddress(Request $request){
-        $patient = Auth::guard('patient')->user();
-        return new PatientResource2($patient);
-    }
     
     public function uploadNailImage(Request $request){
         
@@ -122,7 +118,7 @@ class PatientController extends BaseController
         if (!Hash::check($request->current_password, $patient->password)) {
             return response()->json(['error' => 'Current password is incorrect'], 401);
         }
-        Patient::where('id',$patient->id)->update(['password'=>Hash::make($request->password)]);
+        Patient::where('id',$patient->id)->update(['password'=>Hash::make($request->new_password)]);
         return response()->json(['success'=>true,'message'=>'Password Updated Successfully'],200);
     }
 
