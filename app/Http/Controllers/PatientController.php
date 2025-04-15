@@ -147,29 +147,40 @@ class PatientController extends BaseController
     public function rateDoctor(Request $request, $doctorId) {
         try {
             $patient = Auth::guard('patient')->user();
+
+            if(!$patient) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => 'Patient not found.',
+                ], 404);
+            }
     
             $validated = $request->validate([
-                'rateing' => 'required|numeric|min:1|max:5', // Rating from 1 to 5
+                'rating' => 'required|numeric|min:1|max:5',
             ]);
     
             $doctor = Doctor::findOrFail($doctorId);
     
-            // Calculate new average rating
-            $currentRateing = $doctor->rateing;
-            $totalRateings = $doctor->total_rateings;
-            $newRateing = ($currentRateing * $totalRateings + $validated['rateing']) / ($totalRateings + 1);
+            $newRating = $validated['rating'];
+            $numberOfRatings = $doctor->number_of_ratings;
+            $ratingAverage = $doctor->total_ratings;
     
-            // Update doctor's rating
-            $doctor->rateing = $newRateing;
-            $doctor->total_rateings += 1; // Increment total ratings
-            $doctor->save();
+            $newNumberOfRatings = $numberOfRatings + 1;
+            $newRatingAverage = ($ratingAverage * $numberOfRatings + $newRating) / $newNumberOfRatings;
+    
+            $doctor->update([
+                'rating' => $newRating,  // Save the latest rating
+                'total_ratings' => $newRatingAverage,
+                'number_of_ratings' => $newNumberOfRatings,
+            ]);
     
             return response()->json([
                 'success' => true,
                 'message' => 'Rating submitted successfully.',
-                'new_rateing' => $doctor->rateing,
+                'last_rating' => $doctor->rating,
+                'average_rating' => round($doctor->total_ratings, 2),
+                'number_of_ratings' => $doctor->number_of_ratings,
             ]);
-    
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -177,7 +188,7 @@ class PatientController extends BaseController
             ], 500);
         }
     }
-
+    
     public function searchByName(Request $request){
 
         // Validate the request
