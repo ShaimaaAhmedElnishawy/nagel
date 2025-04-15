@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address')->nullable();
-            $table->string('lacation')->nullable();
+            $table->string('location')->nullable();
             $table->unsignedBigInteger('doctor_id');
             $table->foreign('doctor_id')
             ->references('id')

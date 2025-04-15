@@ -23,7 +23,6 @@ class ClinicController extends BaseController
                 'address' => 'nullable|string',
                 'location'=>'nullable|string',
                 'phone' => 'nullable|string|min:7|max:15',
-                //'available_hours' => 'required|string',
             ]);
             $vaildateData['doctor_id'] = $doctor->id;
             $clinic = Clinic::create($vaildateData);
@@ -72,9 +71,9 @@ class ClinicController extends BaseController
             // Validate the request data
             $validateData = $request->validate([
                 'name' => 'sometimes|string',
-                'address' => 'sometimes|string',
-                'phone' => 'sometimes|string|min:11|max:15',
-                //'available_hours' => 'sometimes|string',
+                'address' => 'nullable|string',
+                'phone' => 'nullable|string|min:11|max:15',
+                'location' => 'nullable|string',
             ]);
 
             // Update the clinic
