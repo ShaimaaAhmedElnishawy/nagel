@@ -177,8 +177,8 @@ class PatientController extends BaseController
             return response()->json([
                 'success' => true,
                 'message' => 'Rating submitted successfully.',
-                'last_rating' => $doctor->rating,
-                'average_rating' => round($doctor->total_ratings, 2),
+                'rating' => $doctor->rating,
+                'total_rating' => round($doctor->total_ratings, 2),
                 'number_of_ratings' => $doctor->number_of_ratings,
             ]);
         } catch (\Exception $e) {
