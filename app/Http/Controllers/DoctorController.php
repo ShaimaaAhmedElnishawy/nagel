@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 class DoctorController extends BaseController 
 {
 
@@ -37,9 +38,9 @@ class DoctorController extends BaseController
             // Store new photo
             $file = $request->file('photo');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/doctors/photos'), $filename);
+            $path= $file->storeAs('doctors/photos', $filename, 'public');
 
-            $path = 'uploads/doctors/photos/' . $filename;
+            
 
             
             // Update doctor's photo
@@ -48,7 +49,7 @@ class DoctorController extends BaseController
             return response()->json([
                 'success' => true,
                 'message' => 'Photo uploaded successfully',
-                'photo_url' => asset("storage/{$path}") // Return full URL to the image
+                'photo_url' =>  url(Storage::url($path)) 
             ], 200);
 
         } catch (\Exception $e) {
