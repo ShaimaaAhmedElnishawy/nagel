@@ -55,6 +55,7 @@ class AuthController extends BaseController
             if ($request->hasFile('proof')) {
                 $proofPath= $request->file('proof')->store('doctors/proofs', 'public');
                 $validData['proof'] = url(Storage::url($proofPath));
+                asset("storage/{$proofPath}");
             }
             $validData['status'] = 'pending';
             $validData['password'] = Hash::make($validData['password']);
