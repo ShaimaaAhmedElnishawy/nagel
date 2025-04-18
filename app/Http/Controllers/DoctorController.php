@@ -35,15 +35,20 @@ class DoctorController extends BaseController
             // Delete old photo if it exists
             
             // Store new photo
-            $photoPath = $request->file('photo')->store('doctors/photos', 'public');
+            $file = $request->file('photo');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/doctors/photos'), $filename);
+
+            $path = 'uploads/doctors/photos/' . $filename;
+
             
             // Update doctor's photo
-            Doctor::where('id', $doctor->id)->update(['photo' => $photoPath]);
+            Doctor::where('id', $doctor->id)->update(['photo' => $path]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Photo uploaded successfully',
-                'photo_url' => asset("storage/{$photoPath}") // Return full URL to the image
+                'photo_url' => asset("storage/{$path}") // Return full URL to the image
             ], 200);
 
         } catch (\Exception $e) {
@@ -54,7 +59,7 @@ class DoctorController extends BaseController
             }
 }
 
-    public function getClinic($doctor_id){}
+    
     // ##DATA EDITING :-
     public function editName(Request $request){
 
