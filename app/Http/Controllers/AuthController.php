@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends BaseController
 {
@@ -52,7 +53,8 @@ class AuthController extends BaseController
             }
     
             if ($request->hasFile('proof')) {
-                $validData['proof'] = $request->file('proof')->store('doctors/proofs', 'public');
+                $proofPath= $request->file('proof')->store('doctors/proofs', 'public');
+                $validData['proof'] = url(Storage::url($proofPath));
             }
             $validData['status'] = 'pending';
             $validData['password'] = Hash::make($validData['password']);
