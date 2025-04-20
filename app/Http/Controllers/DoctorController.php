@@ -73,7 +73,7 @@ class DoctorController extends BaseController
             $doctor = Auth::guard('doctor')->user();
 
             // Store the photo
-            $path = $request->file('photo')->store('doctors/photos', 'public');
+            $path = $request->file('photo')->store('doctors', 'public');
 
             // Update doctor's photo
             Doctor::where('id', $doctor->id)->update(['photo' => $path]);
