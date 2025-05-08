@@ -47,7 +47,7 @@ class PatientController extends BaseController
             'file', // The key for the file
             $imageContent, // The file content
             $imageFile->getClientOriginalName() // The file name
-        )->post('https://heavy-mugs-work.loca.lt/predict/');
+        )->post('https://twenty-jokes-admire.loca.lt/predict/');
         
         // Check if the request was successful
         if ($response->successful()) {
