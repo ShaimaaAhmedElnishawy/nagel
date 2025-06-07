@@ -24,58 +24,20 @@ class DoctorController extends BaseController
         
     }
 
-//     public function UploadProfilePicture(Request $request){
 
-//         try {
-//             $doctor = Auth::guard('doctor')->user();
-            
-//             $validData = $request->validate([
-//                 'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//             ]);
-
-//             // Delete old photo if it exists
-            
-//             // Store new photo
-//             $file = $request->file('photo');
-//             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-//             $path= $file->storeAs('doctors/photos', $filename, 'public');
-
-            
-
-            
-//             // Update doctor's photo
-//             Doctor::where('id', $doctor->id)->update(['photo' => $path]);
-
-//             return response()->json([
-//                 'success' => true,
-//                 'message' => 'Photo uploaded successfully',
-//                 'photo_url' =>  url(Storage::url($path)) 
-//             ], 200);
-
-//         } catch (\Exception $e) {
-//             return response()->json([
-//                 'success' => false,
-//                 'message' => $e->getMessage()
-//             ], 500);
-//             }
-// }
-
-
-    public function UploadProfilePicture(Request $request)
-    {
+    public function UploadProfilePicture(Request $request){
+    
         // Validate the request
         $request->validate([
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         try {
-            // Get the authenticated doctor
+
             $doctor = Auth::guard('doctor')->user();
 
-            // Store the photo
             $path = $request->file('photo')->store('doctors', 'public');
 
-            // Update doctor's photo
             Doctor::where('id', $doctor->id)->update(['photo' => $path]);
 
             return response()->json([
@@ -105,8 +67,6 @@ class DoctorController extends BaseController
             return response()->json($validator->errors(),400);
         } 
         
-        // $doctor->name = $request->name;
-       // $doctor->save();
         Doctor::where('id', $doctor->id)->update(['name' => $request->name]);
         return response()->json(['success'=>true,'message'=>'Name Updated Successfully'],200);
 
