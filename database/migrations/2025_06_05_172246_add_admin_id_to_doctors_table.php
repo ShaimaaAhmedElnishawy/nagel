@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::table('doctors', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('admin_id');
+            $table->unsignedBigInteger('admin_id')->nullable();
             $table->foreign('admin_id')
-            ->nullable()
             ->references('id')
             ->on('admins')
             ->onDelete('cascade')->onUpdate('cascade');

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::table('nail_images', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('diseases_id');
+            $table->unsignedBigInteger('diseases_id')->nullable();
             $table->foreign('diseases_id')
-            ->nullable()
             ->references('id')
             ->on('diseases')
             ->onDelete('cascade')->onUpdate('cascade');
