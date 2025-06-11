@@ -45,7 +45,6 @@ class AuthController extends BaseController
                 'phone' => 'required|string|min:11|max:15',
                 'specialization' => 'required|string',
                 'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'admin_id' => 'nullable|exists:admins,id',
             ]);
 
     
@@ -56,7 +55,6 @@ class AuthController extends BaseController
 
             $validData['status'] = 'pending';
             $validData['password'] = Hash::make($validData['password']);
-            $validData['admin_id'] = $request->admin_id ?? null;
             Doctor::create($validData);
             return response()->json(['success' => true,'message' => 'thanks for rejestring to our app ,your registration pending admin approval']);
         } catch (\Exception $e) {

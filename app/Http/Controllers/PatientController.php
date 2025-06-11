@@ -28,7 +28,6 @@ class PatientController extends BaseController
         // Validate the request (only the image is required)
         $request->validate([
             'image_file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'desease_id' => 'nullable|exists:diseases,id',
         ]);
 
         // Get the authenticated patient
