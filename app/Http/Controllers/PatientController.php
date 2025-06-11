@@ -56,7 +56,7 @@ class PatientController extends BaseController
             // Save the image and AI response to the database
             $nailImage = Nail_image::create([
                 'patient_id' => $patient->id, // Use the authenticated patient's ID
-                'image_file' => $path,
+                'image_file' => asset('storage/' . $path),
                 'diagnosis' => $aiResponse['class'],
                 'confidence' => $aiResponse['confidence'],
                 'probabilities' => json_encode($aiResponse['probabilities']), // Store probabilities as JSON
