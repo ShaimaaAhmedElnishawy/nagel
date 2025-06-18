@@ -136,6 +136,34 @@ class PatientController extends BaseController
 
         return response()->json(['success'=>true,'message'=>'Phone Updated Successfully'],200);
     }
+    public function editAddress(Request $request){
+
+        $patient= Auth::guard('patient')->user();
+        $validator=Validator::make($request->all(),[
+            'address' => 'required|string',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(),400);
+        }
+        Patient::where('id',$patient->id)->update(['address'=>$request->address]);
+
+        return response()->json(['success'=>true,'message'=>'address Updated Successfully'],200);
+    }
+    public function editBirthdate(Request $request){
+
+        $patient= Auth::guard('patient')->user();
+        $validator=Validator::make($request->all(),[
+            'DOB' => 'required|string',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(),400);
+        }
+        Patient::where('id',$patient->id)->update(['DOB'=>$request->DOB]);
+
+        return response()->json(['success'=>true,'message'=>'birthdate Updated Successfully'],200);
+    }
 
     public function showDoctorData(){
 

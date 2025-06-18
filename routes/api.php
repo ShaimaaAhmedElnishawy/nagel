@@ -73,6 +73,8 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
             Route::put('/patient/editEmail',[PatientController::class,'editEmail']);
             Route::put('/patient/editPassword',[PatientController::class,'editPassword']);
             Route::put('/patient/editPhone',[PatientController::class,'editPhone']);
+            Route::put('/patient/editAddress',[PatientController::class,'editAddress']);
+            Route::put('/patient/editBirthdate',[PatientController::class,'editBirthdate']);
             
             Route::get('/patient/showDoctors',[PatientController::class,'showDoctorData']);
             Route::post('/doctors/{doctor}/rate',[PatientController::class,'rateDoctor']);
