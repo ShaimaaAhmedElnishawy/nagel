@@ -197,7 +197,7 @@ class ClinicController extends BaseController
                 'message' => 'Clinic not found.',
             ], 404);
         }
-        if($doctor->clinic->id !== $doctor->id){
+        if($clinic->doctor_id !== $doctor->id){
             return response()->json(['success' => false, 'message' => 'You are not authorized to delete this clinic']);
         }
         $clinic->delete();
