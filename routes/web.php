@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,9 @@ Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
     $mimeType = Storage::mimeType($path);
 
     return Response::make($file, 200)->header("Content-Type", $mimeType);
+});
+
+Route::get('/create-storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created!';
 });
