@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ClinicController;
@@ -95,6 +96,12 @@ Route::post('/admin/login',[AuthController::class,'AdminLogin']);
     Route::post('/admin/approveDoctor/{doctor_id}',[AdminController::class,'approveDoctor']);
     Route::post('/admin/rejectDoctor/{doctor_id}',[AdminController::class,'rejectDoctor']);
   });
+
+
+    Route::get('/create-storage-link', function () {
+        Artisan::call('storage:link');
+        return 'Storage link created!';
+        });
 
     
             
