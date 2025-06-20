@@ -74,10 +74,10 @@ class PatientController extends BaseController
         $patient= Auth::guard('patient')->user();
         $nail_images= Nail_image::where('patient_id',$patient->id)->get();
 
-        $nail_images->transform(function ($item) {
-            $item->image_url = asset('storage/' . $item->image_file);
-            return $item;
-        });
+        // $nail_images->transform(function ($item) {
+        //     $item->image_url = asset('storage/' . $item->image_file);
+        //     return $item;
+        // });
         return response()->json(['success'=>true,'nail_images'=>$nail_images],200);
     }
 
